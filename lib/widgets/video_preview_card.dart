@@ -39,10 +39,10 @@ class VideoPreviewCard extends StatelessWidget {
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         // Reduced opacity slightly to make the blur more visible
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           width: 1,
                         ),
                       ),

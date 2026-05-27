@@ -26,9 +26,9 @@ class SkillTrackCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [bgColor, bgColor.withOpacity(0.7)],
+          colors: [bgColor, bgColor.withValues(alpha: 0.7)],
         ),
-        border: Border.all(color: accentColor.withOpacity(0.2)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

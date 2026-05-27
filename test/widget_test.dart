@@ -1,30 +1,63 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:snaplearn/main.dart';
+import 'package:snaplearn/core/models/lesson.dart';
+import 'package:snaplearn/core/models/user_profile.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const SnapLearnApp());
+  test(
+    'UserProfile copyWith preserves account flags and updates interests',
+    () {
+      final profile = UserProfile(
+        id: 'user_1',
+        displayName: 'Learner',
+        email: 'learner@example.com',
+        isBlocked: true,
+        isDeleted: true,
+        interests: const ['Programming'],
+        likedLessonIds: const ['lesson_1'],
+      );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final updated = profile.copyWith(
+        displayName: 'Updated Learner',
+        interests: const ['Business', 'Design'],
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      expect(updated.displayName, 'Updated Learner');
+      expect(updated.email, profile.email);
+      expect(updated.isBlocked, isTrue);
+      expect(updated.isDeleted, isTrue);
+      expect(updated.interests, ['Business', 'Design']);
+      expect(updated.likedLessonIds, ['lesson_1']);
+    },
+  );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  test(
+    'Lesson feed classification treats null or empty courseId as feed video',
+    () {
+      final shortVideo = Lesson(
+        id: 'short_1',
+        title: 'Admin short',
+        category: 'CODING',
+        videoUrl: 'https://example.com/video.mp4',
+        courseId: null,
+      );
+      final legacyShortVideo = Lesson(
+        id: 'short_2',
+        title: 'Legacy short',
+        category: 'CODING',
+        videoUrl: 'https://example.com/video.mp4',
+        courseId: '',
+      );
+      final courseLesson = Lesson(
+        id: 'lesson_1',
+        title: 'Course lesson',
+        category: 'CODING',
+        videoUrl: 'https://example.com/video.mp4',
+        courseId: 'course_1',
+      );
+
+      expect(shortVideo.isFeedVideo, isTrue);
+      expect(legacyShortVideo.isFeedVideo, isTrue);
+      expect(courseLesson.isFeedVideo, isFalse);
+    },
+  );
 }
